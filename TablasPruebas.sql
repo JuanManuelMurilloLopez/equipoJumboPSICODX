@@ -1,32 +1,46 @@
-CREATE TABLE preguntasOtis (
+CREATE TABLE pruebas (
+    idPrueba INT PRIMARY KEY not NULL,
+    nombre VARCHAR(100),
+    descripcion VARCHAR(255),
+    instrucciones TEXT,
+    duracion INT
+);
+
+CREATE TABLE areasotis (
+    idAreaOtis INT,
+    nombreAreaOtis VARCHAR(30)
+);
+
+CREATE TABLE preguntasotis (
     idPreguntaOtis VARCHAR(36) PRIMARY KEY not NULL, 
     idPrueba VARCHAR(36),
     numeroPregunta INT,
-    pregunta VARCHAR(255),
-    FOREIGN KEY (idPrueba) REFERENCES pruebas(idPrueba)
+    preguntaOtis VARCHAR(255),
+    idAreaOtis INT,
+    FOREIGN KEY (idPrueba) REFERENCES pruebas(idPrueba),
+    FOREIGN KEY (idAreaOtis) REFERENCES areasotis(idAreaOtis)
 );
 
-CREATE TABLE opcionesOtis (
+CREATE TABLE opcionesotis (
     idOpcionOtis VARCHAR(36) PRIMARY KEY,
     idPreguntaOtis VARCHAR(36),
-    numeroOpcion INT,
+    opcionOtis INT,
     descripcionOpcion TEXT,
     esCorrecta BOOLEAN,
-    FOREIGN KEY (idPreguntaOtis) REFERENCES preguntasOtis(idPreguntaOtis)
+    FOREIGN KEY (idPreguntaOtis) REFERENCES preguntasotis(idPreguntaOtis)
 );
 
-CREATE TABLE respuestaOtisAspirante (
-    idRespuestaOtisAspirante VARCHAR(36) PRIMARY KEY not NULL,
+CREATE TABLE respuestaotisaspirante (
+    idRespuestaOtis VARCHAR(36) PRIMARY KEY not NULL,
     idAspirante VARCHAR(36),
     idGrupo VARCHAR(36),
     idPreguntaOtis VARCHAR(36),
     idOpcionOtis VARCHAR(36),  -- Solo si es opción múltiple
     idPrueba VARCHAR(36),
-    respuestaAbierta VARCHAR(5),  -- Solo si es pregunta abierta
     tiempoRespuesta INT,  -- En segundos
     FOREIGN KEY (idAspirante) REFERENCES aspirantes(idAspirante),
-    FOREIGN KEY (idPreguntaOtis) REFERENCES preguntasOtis(idPreguntaOtis),
-    FOREIGN KEY (idOpcionOtis) REFERENCES opcionesOtis(idOpcionOtis),
+    FOREIGN KEY (idPreguntaOtis) REFERENCES preguntasotis(idPreguntaOtis),
+    FOREIGN KEY (idOpcionOtis) REFERENCES opcionesotis(idOpcionOtis),
     FOREIGN KEY (idPrueba) REFERENCES pruebas(idPrueba),
     FOREIGN KEY (idGrupo) REFERENCES grupos(idGrupo)
 );
@@ -39,7 +53,7 @@ CREATE TABLE colores(
     hexColor VARCHAR(7)
 );
 
-CREATE TABLE seleccionesColores(
+CREATE TABLE seleccionescolores(
     idSeleccionColores VARCHAR(36) PRIMARY KEY NOT NULL, -- UUID
     idPrueba VARCHAR(36), -- UUID
     idAspirante VARCHAR(36), -- UUID
